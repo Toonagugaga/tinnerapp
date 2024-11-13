@@ -2,7 +2,7 @@ declare global {
     namespace NodeJS {
         interface ProcessEnv {
             PORT: string
-            MODE?: string
+            MODE: string
         }
     }
 }
@@ -10,7 +10,7 @@ declare global {
 import { file } from "bun"
 
 let _tls = {}
-const mode = (Bun.env.MODE as string) || `production`
+const mode = Bun.env.MODE || `production`
 
 if (mode !== `production`) {
     const cert = file("../ssl/localhost.pem")
