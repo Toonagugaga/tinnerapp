@@ -6,20 +6,31 @@ import { cors } from '@elysiajs/cors'
 import { MongoDB } from "./configs/database.config"
 import { jwtConfig } from "./configs/jwt.config"
 import { AccountController } from "./controllers/account.controller"
+import { UserController } from "./controllers/user.controller"
 MongoDB.connect()
 const app = new Elysia()
   .use(cors())
   .use(AccountController)
   .use(jwtConfig)
   .use(swaggerConfig)
-  .use(Example)
+  // .use(Example)
+  .use(UserController)
+  //   .listen({
+  //     port: Bun.env.PORT || 8000,
+  //     tls: tlsConfig
+  //   })
+
+  // console.log(
+  //   `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
+  // )
   .listen({
     port: Bun.env.PORT || 8000,
     tls: tlsConfig
   })
 
-console.log(
-  `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
-)
+let protocol = 'http'
+if ('cert' in tlsConfig)
+  protocol = 'https'
+console.log(`🦊 Elysia is running at ${protocol}://${app.server?.hostname}:${app.server?.port}`)
 
 

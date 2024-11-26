@@ -1,6 +1,6 @@
 import Elysia from "elysia"
 import { jwtConfig } from "../configs/jwt.config"
-import { _register, AccountDto } from "../types/account.type"
+import { register, _userandToken, AccountDto } from "../types/account.type"
 import { Accountservices } from "../services/account.service"
 
 export const AccountController = new Elysia({
@@ -9,6 +9,24 @@ export const AccountController = new Elysia({
 })
     .use(jwtConfig)
     .use(AccountDto)
+    .post('/login', async ({ body, jwt, set }) => {
+        try {
+            const user = await Accountservices.login(body)
+            const token = await jwt.sign({ id: user.id })
+            return { user, token }
+        } catch (error) {
+            set.status = "Bad Request"
+            if (error instanceof Error)
+                throw new Error(error.message)
+            set.status = "Internal Server Error"
+            throw new Error("Something went wrong, tr again later")
+
+        }
+    }, {
+        detail: { summary: "Login" },
+        body: "login",
+        response: _userandToken,
+    })
 
     .post('/register', async ({ body, jwt, set }) => {
         try {
@@ -25,7 +43,7 @@ export const AccountController = new Elysia({
 
     }, {
         body: "register",
-        response: "account",
+        response: _userandToken,
         detail: {
             summary: "Create new user"
         },
