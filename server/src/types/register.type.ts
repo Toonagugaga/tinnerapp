@@ -1,4 +1,5 @@
 import { Static, t } from "elysia"
+import { _login } from "./account.type"
 
 export const _register = t.Object({
     username: t.String(),
@@ -16,4 +17,4 @@ export const _register = t.Object({
         t.Literal('all')
     ])),
 })
-export type register = Static<typeof _register>
+

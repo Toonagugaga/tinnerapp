@@ -7,6 +7,8 @@ import { MongoDB } from "./configs/database.config"
 import { jwtConfig } from "./configs/jwt.config"
 import { AccountController } from "./controllers/account.controller"
 import { UserController } from "./controllers/user.controller"
+import staticPlugin from "@elysiajs/static"
+import { PhotoController } from "./controllers/photo.controller"
 MongoDB.connect()
 const app = new Elysia()
   .use(cors())
@@ -15,6 +17,11 @@ const app = new Elysia()
   .use(swaggerConfig)
   // .use(Example)
   .use(UserController)
+  .use(staticPlugin({
+    assets: "public/uploads",
+    prefix: "img"
+  }))
+  .use(PhotoController)
   //   .listen({
   //     port: Bun.env.PORT || 8000,
   //     tls: tlsConfig

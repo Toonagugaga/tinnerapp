@@ -1,8 +1,8 @@
 import { error } from "elysia"
 import { User } from "../models/user.madel"
-import { login } from "../types/account.type"
+import { login, register } from "../types/account.type"
 import { user } from "../types/user.type"
-import { register } from "../types/register.type"
+import { _register } from "../types/register.type"
 
 export const Accountservices = {
     login: async function (loginData: login): Promise<user> {
