@@ -6,7 +6,9 @@ import { _register } from "../types/register.type"
 
 export const Accountservices = {
     login: async function (loginData: login): Promise<user> {
-        const user = await User.findOne({ username: loginData.username }).exec()
+        const user = await User.findOne({ username: loginData.username })
+            .populate("photos")
+            .exec()
         if (!user)
             throw new Error("User does not exist")
         const verifyPassword = await user.verifyPassword(loginData.password)
