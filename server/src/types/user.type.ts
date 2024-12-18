@@ -17,7 +17,8 @@ export const _profile = t.Object({
 })
 export const _user = t.Object({
     ..._profile.properties,
-
+    followers: t.Optional(t.Array(t.Union([t.Partial(_profile), t.String()]))),
+    following: t.Optional(t.Array(t.Union([t.Partial(_profile), t.String()])))
 })
 export const _userandToken = t.Object({
     user: _user,
@@ -41,11 +42,13 @@ const _userPagination = t.Object({
 })
 export const _updateProfile = t.Omit(_profile, ['id', 'username', 'updated_at', 'created_at', 'last_active', 'age'])
 export const _userPaginator = CreatePagination(_user, _userPagination)
+
 export const UserDto = new Elysia().model({
     pagination: t.Optional(_userPagination),
     updateProfile: _updateProfile,
     users: _userPaginator,
-    user: _user
+    user: _user,
+    target_id: t.Object({ target_id: t.String() }),
 })
 export type updateProfile = Static<typeof _updateProfile>
 export type userPagination = Static<typeof _userPagination>
